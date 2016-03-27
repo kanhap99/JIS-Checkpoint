@@ -5,5 +5,6 @@
   <li>Adding items</li>
   <li>Login with school email</li>
   <li>Submit requests for lost items and be emailed with matches</li>
+  <li>Uses react.js for an interactive, reactive UI </li>
 </ul>
 

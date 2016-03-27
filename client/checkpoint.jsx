@@ -18,12 +18,6 @@ FlowRouter.route('/login', {
     ReactLayout.render(MainLayout, {content: <Login />})
   }
 });
-FlowRouter.route('/add', {
-  name: "Add",
-  action(params) {
-    ReactLayout.render(MainLayout, {content: <AddItem />})
-  }
-});
 FlowRouter.route('/request', {
   name:"Request",
   action(params) {

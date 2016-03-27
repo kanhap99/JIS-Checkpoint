@@ -6,5 +6,8 @@ Meteor.methods({
       submitter: submitter,
       createdAt: new Date()
     });
+  },
+  match: function () {
+    return null
   }
 });

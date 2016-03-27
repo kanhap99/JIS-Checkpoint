@@ -26,3 +26,7 @@ accounts-password
 meteorhacks:search-source
 accounts-google
 accounts-ui
+meteorhacks:npm
+
+
+npm-container

@@ -5,9 +5,9 @@ AddRequest = React.createClass({
       requests: Requests,
       authInProcess: Meteor.loggingIn(),
       canShow: !!Meteor.user(),
-      currentUser: Meteor.user().profile.name
-    };
-
+      currentUsername: Meteor.user() ? Meteor.user().profile.name : '',
+      currentUserEmail: Meteor.user() ? Meteor.user().services.google.email : ''
+    }
     return data;
   },
   noAuthMessage() {
@@ -19,7 +19,7 @@ AddRequest = React.createClass({
     return <div className="container">
       <h2>Request for a lost item</h2>
       <p>*You will be emailed when a matching item is found</p>
-      <AddForm collection={this.data.requests} currentUser={this.data.currentUser} />
+      <AddForm collection={this.data.requests} currentUsername={this.data.currentUsername} currentUserEmail={this.data.currentUserEmail}/>
     </div>;
   },
   getContent() {

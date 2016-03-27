@@ -1,42 +1,63 @@
 CheckpointHome = React.createClass({
-  mixins: [ReactMeteorData],
-  getMeteorData() {
+
+  getInitialState: function() {
     return {
-      items: Items.find({},{sort:{createdAt: -1}}).fetch(),
-      requests: Requests.find({},{sort:{createdAt: -1}}).fetch()
+      data:null
     };
   },
-  renderItems() {
-    return this.data.items.map((item) => {
-        return <Item key={item._id} item={item} />
-    });
+  componentDidMount() {
+    this.serverRequest = $.getJSON('https://spreadsheets.google.com/feeds/list/1-k9Y5scus9GK2Nkbl_pCW7RwcKRLNLovWCOJ0_IORik/1/public/full?alt=json&reverse=true&orderby=column:controlnumber', function (data) {
+      this.setState({
+        data: data.feed
+      });
+    }.bind(this));
   },
-  renderRequests() {
-    return this.data.requests.map((request) => {
-        return <Request key={request._id} request={request} />
-    });
+  componentWillUnmount: function() {
+    this.serverRequest.abort();
   },
-  render() {
-    return <div className="container-fluid">
-
-      <br></br>
-      {/*<Searchbar items={this.data.items} />*/}
-      <div className="row">
-        <div className="col-md-5 col-md-offset-2">
-          <h3>Found items at Checkpoint (in order of most recent)</h3>
-          <br></br>
-          <ul>
-            {this.renderItems()}
-          </ul>
-        </div>
-        <div className="col-md-5">
-          <h3>Pending requests</h3>
-          <br></br>
-          <ul>
-            {this.renderRequests()}
-          </ul>
-        </div>
+  render: function() {
+    return (
+      <div>
+        {/*}<SearchBar
+          filterText={this.state.filterText}
+          inStockOnly={this.state.inStockOnly}
+        />*/}
+      <ItemsList
+          items={this.state.data}
+        />
       </div>
-    </div>;
+    );
+  }
+});
+var ItemsList = React.createClass({
+  render: function() {
+    var rows = [];
+    for(var entry in this.props.items) {
+      rows.push(<ItemRow entry={entry} />)
+    }
+    return (
+      <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Price</th>
+          </tr>
+        </thead>
+        <tbody>{rows}</tbody>
+      </table>
+    );
+  }
+});
+var ItemRow = React.createClass({
+  render: function() {
+    return (
+      <tr>
+        <td>{this.props.entry.gsx$controlnumber.$t}</td>
+        <td>{this.props.entry.gsx$date.$t}</td>
+        <td>{this.props.entry.gsx$item.$t}</td>
+        <td>{this.props.entry.gsx$description.$t}</td>
+        <td>{this.props.entry.gsx$location.$t}</td>
+      </tr>
+    );
   }
 });
